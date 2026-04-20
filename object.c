@@ -86,7 +86,9 @@ int object_write(ObjectType type, const void *data, size_t len, ObjectID *id_out
         return 0;
     }
 
-    // 4. Create shard directory
+    // 4. Create shard directory: objects are split into 256 subdirs (00-ff)
+    //    by the first 2 hex chars of the hash, preventing any single dir
+    //    from growing too large (Git uses the same strategy)
     char hex[HASH_HEX_SIZE + 1];
     hash_to_hex(&id, hex);
     char shard_dir[256];

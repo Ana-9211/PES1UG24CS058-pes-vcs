@@ -92,6 +92,9 @@ int commit_walk(commit_walk_fn callback, void *ctx) {
 }
 
 int head_read(ObjectID *id_out) {
+    // Symbolic ref resolution: HEAD usually contains "ref: refs/heads/main"
+    // rather than a hash. Follow the ref to the branch file to get the
+    // actual commit hash. A raw hash in HEAD means detached HEAD state.
     FILE *f = fopen(HEAD_FILE, "r");
     if (!f) return -1;
     char line[512];
@@ -111,6 +114,9 @@ int head_read(ObjectID *id_out) {
 }
 
 int head_update(const ObjectID *new_commit) {
+    // Symbolic ref resolution: HEAD usually contains "ref: refs/heads/main"
+    // rather than a hash. Follow the ref to the branch file to get the
+    // actual commit hash. A raw hash in HEAD means detached HEAD state.
     FILE *f = fopen(HEAD_FILE, "r");
     if (!f) return -1;
     char line[512];

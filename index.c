@@ -194,7 +194,9 @@ int index_add(Index *index, const char *path) {
     struct stat st;
     if (stat(path, &st) != 0) return -1;
 
-    // Update or add entry
+    // Use index_find to check if this path is already staged.
+    // If found, update the existing entry in place (re-staging a modified
+    // file updates its hash and metadata). If not found, append a new entry.
     IndexEntry *e = index_find(index, path);
     if (!e) {
         if (index->count >= MAX_INDEX_ENTRIES) return -1;

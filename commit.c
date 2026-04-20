@@ -163,7 +163,14 @@ int commit_create(const char *message, ObjectID *commit_id_out) {
     // 4. Message
     snprintf(c.message, sizeof(c.message), "%s", message);
 
-    // 5. Serialize and write commit object
+    // 5. Serialize: commit text format is:
+    //      tree <hash>
+    //      parent <hash>   (omitted for root commit)
+    //      author <name> <unix-timestamp>
+    //      committer <name> <unix-timestamp>
+    //      <blank line>
+    //      <message>
+    // This matches Git's actual commit object format.
     void *data;
     size_t data_len;
     if (commit_serialize(&c, &data, &data_len) != 0) return -1;

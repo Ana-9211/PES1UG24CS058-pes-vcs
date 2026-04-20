@@ -84,6 +84,10 @@ int tree_serialize(const Tree *tree, void **data_out, size_t *len_out) {
 // ─── IMPLEMENTED ─────────────────────────────────────────────────────────────
 
 // Recursive helper: given index entries with a given prefix, build tree
+// Works by scanning entries - if no slash in the relative path, it is a
+// file entry (leaf). If there is a slash, all entries sharing that first
+// path component are grouped and write_tree_level is called recursively
+// to produce a subtree object before continuing to the next component.
 // prefix = e.g. "" for root, "src/" for src subdir
 static int write_tree_level(IndexEntry *entries, int count, const char *prefix, ObjectID *id_out) {
     Tree tree;

@@ -145,7 +145,9 @@ int commit_create(const char *message, ObjectID *commit_id_out) {
     // 1. Build tree from index
     if (tree_from_index(&c.tree) != 0) return -1;
 
-    // 2. Get parent (if any)
+    // 2. Get parent: head_read fails on an empty repository (no commits yet).
+    // In that case has_parent stays 0 and the commit serializer omits the
+    // parent line entirely, producing a root commit with no ancestry.
     ObjectID parent;
     if (head_read(&parent) == 0) {
         c.parent = parent;

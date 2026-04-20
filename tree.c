@@ -7,6 +7,10 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
+// File mode constants (octal): match POSIX permission bits
+// 0100644 = regular file, not executable
+// 0100755 = regular file, executable (owner has +x)
+// 0040000 = directory (tree object)
 #define MODE_FILE      0100644
 #define MODE_EXEC      0100755
 #define MODE_DIR       0040000

@@ -180,7 +180,10 @@ int index_add(Index *index, const char *path) {
     }
     free(data);
 
-    // Get metadata
+    // Get metadata: use stat() to capture mtime and size at staging time.
+    // index_status uses these later to detect unstaged modifications without
+    // rehashing - if mtime or size differs from the stored values, the file
+    // has changed since it was staged (same optimization Git uses).
     struct stat st;
     if (stat(path, &st) != 0) return -1;
 

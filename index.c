@@ -142,6 +142,9 @@ int index_save(const Index *index) {
     *sorted = *index;
     qsort(sorted->entries, sorted->count, sizeof(IndexEntry), compare_entries);
 
+    // Atomic save: write to a .tmp file, fsync to flush kernel buffers
+    // to disk, then rename into place. Prevents a partial index file
+    // if the process crashes mid-write.
     char tmp_path[64];
     snprintf(tmp_path, sizeof(tmp_path), "%s.tmp", INDEX_FILE);
     FILE *f = fopen(tmp_path, "w");

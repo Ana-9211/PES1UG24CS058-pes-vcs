@@ -178,6 +178,9 @@ int commit_create(const char *message, ObjectID *commit_id_out) {
     free(data);
     if (rc != 0) return -1;
 
-    // 6. Update HEAD
+    // 6. Update HEAD: head_update writes the new commit hash atomically
+    // to the branch file (e.g. .pes/refs/heads/main). This single rename
+    // is the moment the commit becomes part of the branch history.
+    // HEAD itself is not modified - it still points to the branch name.
     return head_update(commit_id_out);
 }

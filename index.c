@@ -109,6 +109,8 @@ static int compare_entries(const void *a, const void *b) {
 int index_load(Index *index) {
     index->count = 0;
     FILE *f = fopen(INDEX_FILE, "r");
+    // A missing index file means no files have been staged yet.
+    // This is a normal initial state, not an error - treat it as empty.
     if (!f) return 0; // empty index is fine
 
     char hex[HASH_HEX_SIZE + 1];

@@ -149,6 +149,9 @@ int tree_from_index(ObjectID *id_out) {
     // Empty index edge case: tree_from_index must still produce a valid
     // tree object even with no staged files. An empty tree serializes to
     // zero bytes of entries but still gets a hash and is stored normally.
+    // Empty index edge case: tree_from_index must still produce a valid
+    // tree object even with no staged files. An empty tree serializes to
+    // zero bytes of entries but still gets a hash and is stored normally.
     if (index.count == 0) {
         // Empty tree
         Tree empty; empty.count = 0;

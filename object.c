@@ -95,7 +95,9 @@ int object_write(ObjectType type, const void *data, size_t len, ObjectID *id_out
     snprintf(shard_dir, sizeof(shard_dir), "%s/%.2s", OBJECTS_DIR, hex);
     mkdir_compat(shard_dir);
 
-    // 5. Write to temp file
+    // 5. Write to temp file: atomic write pattern - write to a .tmp file
+    //    first, then rename into place. rename() is atomic on POSIX
+    //    filesystems, so readers never see a partial write
     char final_path[512];
     object_path(&id, final_path, sizeof(final_path));
     char tmp_path[520];

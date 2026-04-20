@@ -146,6 +146,9 @@ static int write_tree_level(IndexEntry *entries, int count, const char *prefix, 
 int tree_from_index(ObjectID *id_out) {
     Index index;
     if (index_load(&index) != 0) return -1;
+    // Empty index edge case: tree_from_index must still produce a valid
+    // tree object even with no staged files. An empty tree serializes to
+    // zero bytes of entries but still gets a hash and is stored normally.
     if (index.count == 0) {
         // Empty tree
         Tree empty; empty.count = 0;
